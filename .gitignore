@@ -102,3 +102,29 @@ dist
 
 # TernJS port file
 .tern-port
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Build Caches
+package-lock.json
+dist/
+.idea/
+*.iml
+.project
+.settings/
+*.sublime-workspace
+*.launch
+.c9/
+**/__snapshots__
+
+# System Files
+**/.DS_Store
+*.db
+*.swp
+npm-debug.log
