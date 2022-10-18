@@ -37,6 +37,10 @@ class PlayerZeroWrapper {
     head.appendChild(script);
   }
 
+  isInitialized(): boolean {
+    return Boolean(window.playerzero);
+  }
+
   identify(userId: string, metadata: Record<string, unknown>) {
     this.playerzero.then((sdk) => sdk.identify(userId, metadata));
   }

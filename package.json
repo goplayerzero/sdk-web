@@ -1,12 +1,15 @@
 {
   "version": "0.0.1",
   "name": "@playerzero/sdk-web",
-  "description": "PlayerZero Web SDK",
+  "description": "The official PlayerZero Web SDK",
   "author": {
     "name": "PlayerZero Support",
     "email": "support@playerzero.app",
     "url": "https://www.playerzero.app"
   },
+  "homepage": "https://github.com/goplayerzero/sdk-web",
+  "repository": "git@github.com:goplayerzero/sdk-web.git",
+  "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
@@ -39,6 +42,7 @@
     "quality",
     "analytics",
     "logrocket",
-    "sentry"
+    "sentry",
+    "fullstory"
   ]
 }
