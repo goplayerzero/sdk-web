@@ -1,9 +1,14 @@
 interface PlayerZeroWindow {
-  identify: (userId: string, metadata: Record<string, unknown>) => void;
+  identify: (userId: string, metadata?: {
+    name?: string,
+    email?: string,
+    group?: string,
+    [key: string]: unknown
+  }) => void;
   setUserVars: (metadata: Record<string, unknown>) => void;
   track: (event: string, metadata?: Record<string, unknown>) => void;
   prompt: () => void;
-  devtoolsUrl: () => Promise<string>;
+  generateDevtoolsUrl: () => Promise<string>;
   kill: () => void;
 }
 
@@ -13,7 +18,7 @@ declare global {
   }
 }
 
-class PlayerZeroWrapper {
+export class PlayerZeroSdk implements PlayerZeroWindow {
 
   init(
     projectId: string,
@@ -41,7 +46,12 @@ class PlayerZeroWrapper {
     return Boolean(window.playerzero);
   }
 
-  identify(userId: string, metadata: Record<string, unknown>) {
+  identify(userId: string, metadata?: {
+    name?: string,
+    email?: string,
+    group?: string,
+    [key: string]: unknown
+  }) {
     this.playerzero.then((sdk) => sdk.identify(userId, metadata));
   }
 
@@ -57,8 +67,8 @@ class PlayerZeroWrapper {
     this.playerzero.then((sdk) => sdk.prompt());
   }
 
-  devtoolsUrl(): Promise<string> {
-    return this.playerzero.then((sdk) => sdk.devtoolsUrl());
+  generateDevtoolsUrl(): Promise<string> {
+    return this.playerzero.then((sdk) => sdk.generateDevtoolsUrl());
   }
 
   kill(){
@@ -76,6 +86,3 @@ class PlayerZeroWrapper {
   }
 
 }
-
-const PlayerZero = new PlayerZeroWrapper();
-export default PlayerZero;

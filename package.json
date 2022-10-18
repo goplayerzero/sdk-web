@@ -7,6 +7,8 @@
     "email": "support@playerzero.app",
     "url": "https://www.playerzero.app"
   },
+  "main": "./index.js",
+  "types": "./@types/index.d.ts",
   "homepage": "https://github.com/goplayerzero/sdk-web",
   "repository": "git@github.com:goplayerzero/sdk-web.git",
   "license": "MIT",

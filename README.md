@@ -5,12 +5,12 @@ generate links to devtools and send your own custom events. More information abo
 ## Install the SDK
 **with npm**
 ```shell
-npm i @goplayerzero/sdk-web --save
+npm i @playerzero/sdk-web --save
 ```
 
 **with yarn**
 ```shell
-yarn add @goplayerzero/sdk-web
+yarn add @playerzero/sdk-web
 ```
 
 ## Initialize the SDK
@@ -36,17 +36,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import * as PlayerZero from '@goplayerzero/sdk-web';
+import PlayerZero from '@playerzero/sdk-web';
 
 PlayerZero.init('<your project id here>');
 
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
-#### Angular
+#### Angular - `main.ts`
 ```javascript
 import { Component } from '@angular/core';
-import * as PlayerZero from '@goplayerzero/sdk-web';
+import PlayerZero from '@playerzero/sdk-web';
 import { environment } from '../environments/environment';
 
 @Component({
@@ -66,7 +66,7 @@ export class AppComponent {
 ```javascript
 import Vue from 'vue';
 import App from './App.vue';
-import * as PlayerZero from '@goplayerzero/sdk-web';
+import PlayerZero from '@playerzero/sdk-web';
 
 PlayerZero.init('<your project id here>');
 Vue.prototype.$PlayerZero = PlayerZero;
@@ -80,7 +80,7 @@ new Vue({
 ```javascript
 import { createApp } from 'vue'
 import App from './App.vue'
-import * as PlayerZero from '@goplayerzero/sdk-web';
+import PlayerZero from '@playerzero/sdk-web';
 
 PlayerZero.init('<your project id here>');
 
