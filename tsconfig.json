@@ -12,7 +12,7 @@
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-    "declarationDir": "dist/@types",
+    "declarationDir": "dist",
     "pretty": true,
     "skipLibCheck": true,
     "types": ["node"],
