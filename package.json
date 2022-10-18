@@ -1,6 +1,6 @@
 {
   "version": "0.0.3",
-  "name": "@playerzero/sdk-web",
+  "name": "@goplayerzero/sdk-web",
   "description": "The official PlayerZero Web SDK",
   "author": {
     "name": "PlayerZero Support",
