@@ -1,1 +1,1 @@
-export * from './sdk/sdk.js';
+export * from './sdk/playerzero.js';
