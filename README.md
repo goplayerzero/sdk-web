@@ -69,7 +69,7 @@ import App from './App.vue';
 import * as PlayerZero from '@goplayerzero/sdk-web';
 
 PlayerZero.init('<your project id here>');
-Vue.prototype.$FullStory = FullStory;
+Vue.prototype.$PlayerZero = PlayerZero;
 
 new Vue({
   render: h => h(App)
@@ -85,7 +85,7 @@ import * as PlayerZero from '@goplayerzero/sdk-web';
 PlayerZero.init('<your project id here>');
 
 const app = createApp(App);
-app.config.globalProperties.$FullStory = FullStory;
+app.config.globalProperties.$PlayerZero = PlayerZero;
 app.mount('#app');
 ```
 
