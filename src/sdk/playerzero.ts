@@ -19,18 +19,27 @@ declare global {
 }
 
 export class PlayerZeroSdk implements PlayerZeroWindow {
+  private get playerzero(): Promise<PlayerZeroWindow> {
+    if (window.playerzero) return Promise.resolve(window.playerzero);
+    else return new Promise((resolve, reject) => {
+      window.addEventListener('playerzero_ready', () => {
+        if (window.playerzero) resolve(window.playerzero);
+        else reject();
+      }, { once: true });
+    });
+  }
 
   init(
     projectId: string,
     endpoint: string = 'https://go.playerzero.app'
-  ){
-    if(window.playerzero){
+  ) {
+    if (window.playerzero) {
       console.warn('PlayerZero has already been initialized. PlayerZero.init() can only be called once.');
       return;
     }
     const head = document.getElementsByTagName("head").item(0);
 
-    if(!head) {
+    if (!head) {
       setTimeout(() => this.init(projectId, endpoint), 100);
       return;
     }
@@ -55,15 +64,15 @@ export class PlayerZeroSdk implements PlayerZeroWindow {
     this.playerzero.then((sdk) => sdk.identify(userId, metadata));
   }
 
-  track(event: string, metadata?: Record<string, unknown>){
-    this.playerzero.then((sdk) => sdk.track(event, metadata));
-  }
-
-  setUserVars(metadata: Record<string, unknown>){
+  setUserVars(metadata: Record<string, unknown>) {
     this.playerzero.then((sdk) => sdk.setUserVars(metadata));
   }
 
-  prompt(){
+  track(event: string, metadata?: Record<string, unknown>) {
+    this.playerzero.then((sdk) => sdk.track(event, metadata));
+  }
+
+  prompt() {
     this.playerzero.then((sdk) => sdk.prompt());
   }
 
@@ -71,18 +80,7 @@ export class PlayerZeroSdk implements PlayerZeroWindow {
     return this.playerzero.then((sdk) => sdk.generateDevtoolsUrl());
   }
 
-  kill(){
+  kill() {
     return this.playerzero.then((sdk) => sdk.kill());
   }
-
-  private get playerzero(): Promise<PlayerZeroWindow> {
-    if(window.playerzero) return Promise.resolve(window.playerzero);
-    else return new Promise((resolve, reject) => {
-      window.addEventListener('playerzero_ready', () => {
-        if(window.playerzero) resolve(window.playerzero);
-        else reject();
-      }, { once: true });
-    });
-  }
-
 }
