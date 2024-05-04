@@ -59,7 +59,8 @@ export class PlayerZeroSdk implements PlayerZeroWindow {
     head.appendChild(script);
   }
 
-  injectFetchWrappers(){
+  private injectFetchWrappers(){
+    console.log('wrapping fetch from the web sdk'); // todo: remove
     const originalFetch = window.fetch;
     if (!window["playerzero"]) {
       // @ts-ignore
