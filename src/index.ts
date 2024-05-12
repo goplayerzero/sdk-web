@@ -1,4 +1,4 @@
-import { PlayerZeroSdk } from './sdk/playerzero.js';
+import {PlayerZeroSdk, PlayerZeroWindow} from './sdk/playerzero.js';
 
-const PlayerZero = new PlayerZeroSdk();
+const PlayerZero: PlayerZeroWindow = new PlayerZeroSdk();
 export default PlayerZero;
