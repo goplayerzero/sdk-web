@@ -1,5 +1,5 @@
 export interface PlayerZeroWindow {
-  init: (projectToken: string, endpoint: string) => void
+  init: (projectToken: string, endpoint?: string) => void
   identify: (userId: string, metadata?: {
     name?: string,
     email?: string,
