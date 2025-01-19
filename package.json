@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1",
+  "version": "0.2.0",
   "name": "@goplayerzero/sdk-web",
   "description": "The official PlayerZero Web SDK",
   "author": {
@@ -10,7 +10,10 @@
   "main": "./index.js",
   "types": "./@types/index.d.ts",
   "homepage": "https://github.com/goplayerzero/sdk-web",
-  "repository": "git@github.com:goplayerzero/sdk-web.git",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/goplayerzero/sdk-web.git"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
