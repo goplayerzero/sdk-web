@@ -59,45 +59,6 @@ export class PlayerZeroSdk implements PlayerZeroWindow {
     head.appendChild(script);
   }
 
-  private injectFetchWrappers(){
-    const originalFetch = window.fetch;
-    if (!window["playerzero"]) {
-      // @ts-ignore
-      window["playerzero"] = {};
-    }
-
-    window.playerzero.monkey_patch_ts = performance.now();
-
-    window.fetch = function (url: RequestInfo | URL, options?: RequestInit) { // preserve arity
-      if (
-          Boolean(window.playerzero) &&
-          Boolean(window.playerzero.before_fetch_apply) &&
-          Boolean(window.playerzero.after_fetch_apply)
-      ) {
-        // create a copy of request info
-        const urlCopy = typeof url === 'string' ? url : {...url};
-        const passedOpts = options || {};
-        const beforeFetchApplyResult = window.playerzero.before_fetch_apply(urlCopy, passedOpts);
-        // console.log(options.headers);
-        // graphql aborts all of their responses; the promise wrapping allows us to get the response text before fetch is aborted
-        return new Promise((resolve, reject) => {
-          // eslint-disable-next-line prefer-rest-params
-          originalFetch(url, passedOpts)
-              .then((response) => {
-                window.playerzero.after_fetch_apply(response, beforeFetchApplyResult)
-                    .catch(() => {})
-                    .finally(() => resolve(response));
-              })
-              .catch(e => reject(e));
-        });
-      } else return originalFetch(url, options);
-    };
-  }
-
-  isInitialized(): boolean {
-    return Boolean(window.playerzero?.kill);
-  }
-
   identify(userId: string, metadata?: {
     name?: string,
     email?: string,
@@ -125,5 +86,54 @@ export class PlayerZeroSdk implements PlayerZeroWindow {
 
   kill(): Promise<boolean> {
     return this.playerzero.then((sdk) => sdk.kill());
+  }
+
+  isInitialized(): boolean {
+    return Boolean(window.playerzero?.kill);
+  }
+
+  private injectFetchWrappers() {
+    const originalFetch = window.fetch;
+    if (!window["playerzero"]) {
+      // @ts-ignore
+      window["playerzero"] = {};
+    }
+
+    window.playerzero.monkey_patch_ts = performance.now();
+
+    window.fetch = function (input: RequestInfo | URL, init?: RequestInit) { // preserve arity
+      if (Boolean(window.playerzero?.before_fetch_apply) && Boolean(window.playerzero?.after_fetch_apply)) {
+        const urlCopy: string = (input instanceof Request) ? input.url : input.toString();
+        const passedOpts = init || {};
+        const origOptsBody = passedOpts.body;
+        if (input instanceof Request) {
+          // According to specification, init takes precedence over input
+          if (passedOpts.method === undefined) passedOpts.method = input.method;
+          if (passedOpts.headers === undefined) passedOpts.headers = input.headers;
+        }
+        let body: ReadableStream | Blob | ArrayBufferView | ArrayBuffer | FormData | URLSearchParams | string | null | undefined
+          = origOptsBody ?? ((input instanceof Request) ? (input as Request).body : undefined);
+        if (!(typeof body === 'string' || body instanceof FormData || body instanceof URLSearchParams) && body !== undefined && body !== null) {
+          body = '';
+        }
+        passedOpts.body = body;
+        const beforeFetchApplyResult = window.playerzero.before_fetch_apply(urlCopy, passedOpts);
+        passedOpts.body = origOptsBody;
+
+        // graphql aborts all of their responses; the promise wrapping allows us to get the response text before fetch is aborted
+        return new Promise((resolve, reject) => {
+          // eslint-disable-next-line prefer-rest-params
+          originalFetch(input, passedOpts)
+            .then((response) => {
+              window.playerzero.after_fetch_apply(response, beforeFetchApplyResult)
+                // eslint-disable-next-line @typescript-eslint/no-empty-function
+                .catch(() => {
+                })
+                .finally(() => resolve(response));
+            })
+            .catch(e => reject(e));
+        });
+      } else return originalFetch(input, init);
+    };
   }
 }
