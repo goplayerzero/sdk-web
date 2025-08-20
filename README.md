@@ -1,36 +1,53 @@
 # PlayerZero Web SDK
-PlayerZero's browser SDK lets you manage PlayerZero on your site as well as 
-generate links to devtools and send your own custom events. More information about the PlayerZero API can be found at https://docs.playerzero.app.
 
-## Install the SDK
-**with npm**
+The PlayerZero Web SDK enables you to integrate PlayerZero into your website or web application. With this SDK, you can
+manage PlayerZero initialization, identify users, track custom analytics events, generate DevTools links, and more. For
+comprehensive API documentation,
+visit [PlayerZero Docs](https://playerzero.ai/docs/developer-guide/configuration-guides/capturing-user-sessions/npm).
+
+---
+
+## Installation
+
+Install the SDK using your preferred package manager:
+
+**npm**
+
 ```shell
 npm i @goplayerzero/sdk-web --save
 ```
 
 **with yarn**
+
 ```shell
 yarn add @goplayerzero/sdk-web
 ```
 
 ## Initialize the SDK
-Call the `init()` function with your Project ID as soon as you can in your website startup process. 
-Calling init a second time after successful initialization will trigger console warnings - 
-if you need to programmatically check if PlayerZero has been initialized at some point in your code, you can call `PlayerZero.isInitialized()`.
+
+Calling `init()` more than once after successful initialization will trigger console warnings. To check if PlayerZero
+has already been initialized, use `PlayerZero.isInitialized()`.
 
 ### PlayerZero API
-* `PlayerZero.init(projectId: string)` - Initialize PlayerZero on your site with the specific Project ID. The project id can be found on the [Settings > Data Collection page](https://go.playerzero.app/setting/data)
-* `PlayerZero.isInitialized(): Boolean` - Check if PlayerZero is initialized in your application.
-* `PlayerZero.identify(userId: string, metadata: Record<string, unknown>)` - Identify your user with PlayerZero
-* `PlayerZero.setUserVars(metadata: Record<string, unknown>)` - Set user properties & metadata without resetting the identity
-* `PlayerZero.track(event: string, metadata?: Record<string, unknown>)` - Send an analytics event to PlayerZero
-* `PlayerZero.prompt()` - Prompt the user to upload their Devtools Report
-* `PlayerZero.devtoolsUrl(): Promise<string>` - Generate a Devtools URL for the current session
-* `PlayerZero.kill()` - Shut down PlayerZero immediately. PlayerZero cannot be reinitialized after this is called. 
 
-### Examples 
+* `PlayerZero.init(apiToken: string, options: {endpoint?: string, privacyFnUrl?: string})` - Initialize PlayerZero with
+  your API Token and optional configuration. The API Token can be found on [PlayerZero's](https://playerzero.ai)
+  `Project Settings` under the `Web SDK` area.
+* `PlayerZero.isInitialized(): Boolean` - Returns `true` if PlayerZero is initialized.
+* `PlayerZero.identify(userId: string, metadata: Record<string, unknown>)` - Identify the current user and associate
+  metadata.
+* `PlayerZero.setUserVars(metadata: Record<string, unknown>)` - Update user properties and metadata without resetting
+  the identity.
+* `PlayerZero.track(event: string, metadata?: Record<string, unknown>)` - Track a custom analytics event with optional
+  metadata.
+* `PlayerZero.prompt()` - Prompt the user to interact with their DevTools report.
+* `PlayerZero.devtoolsUrl(): Promise<string>` - Generate a DevTools URL for the current session.
+* `PlayerZero.kill()` - Immediately shut down PlayerZero. This action is irreversible for the session.
+
+### Examples
 
 #### React
+
 ```javascript
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -40,10 +57,11 @@ import PlayerZero from '@goplayerzero/sdk-web';
 
 PlayerZero.init('<your project id here>');
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App/>, document.getElementById('root'));
 ```
 
 #### Angular - `main.ts`
+
 ```javascript
 import { Component } from '@angular/core';
 import PlayerZero from '@goplayerzero/sdk-web';
@@ -63,6 +81,7 @@ export class AppComponent {
 ```
 
 #### Vue
+
 ```javascript
 import Vue from 'vue';
 import App from './App.vue';
@@ -77,6 +96,7 @@ new Vue({
 ```
 
 #### Vue 3
+
 ```javascript
 import { createApp } from 'vue'
 import App from './App.vue'
@@ -90,9 +110,13 @@ app.mount('#app');
 ```
 
 ## Using the SDK
+
 Once PlayerZero is initialized, you can make calls to the PlayerZero SDK.
 
 ### Identify a User
+
+Associate a user and their metadata with PlayerZero:
+
 ```javascript
 PlayerZero.identify(
   'userId',
@@ -105,6 +129,9 @@ PlayerZero.identify(
 ```
 
 ### Track custom analytics events
+
+Send custom events to PlayerZero for analytics:
+
 ```javascript
 PlayerZero.track(
   'checkout',
@@ -112,9 +139,20 @@ PlayerZero.track(
 );
 ```
 
-### Generate a Devtools URL
+### Generate a DevTools URL
+
+Create a DevTools URL for the current session:
+
 ```javascript
 PlayerZero.devtoolsUrl().then(url => console.log('PlayerZero Devtools URL', url));
 ```
 
+## Additional Information
 
+* For advanced configuration and troubleshooting, refer to the [official documentation](https://playerzero.ai).
+* If you need to stop PlayerZero during a session, call PlayerZero.kill(). Note that reinitialization is not possible
+  after calling this method.
+
+## Support
+
+For questions or support, please contact [PlayerZero Support](mailto:support@playerzero.ai).

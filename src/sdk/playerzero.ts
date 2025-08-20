@@ -1,5 +1,5 @@
 export interface PlayerZeroWindow {
-  init: (projectToken: string, endpoint?: string) => void
+  init: (projectToken: string, endpoint?: string | PlayerZeroConfiguration) => void
   identify: (userId: string, metadata?: {
     name?: string,
     email?: string,
@@ -11,6 +11,11 @@ export interface PlayerZeroWindow {
   prompt: () => void;
   devtools: () => Promise<string>;
   kill: () => Promise<boolean>;
+}
+
+interface PlayerZeroConfiguration {
+  endpoint?: string;
+  privacyFnUrl?: string;
 }
 
 interface PlayerZeroFetchWrapper {
@@ -39,7 +44,7 @@ export class PlayerZeroSdk implements PlayerZeroWindow {
 
   init(
     projectToken: string,
-    endpoint: string = 'https://go.playerzero.app'
+    configOrEndpoint: string | PlayerZeroConfiguration | undefined,
   ) {
     if (this.isInitialized()) {
       console.warn('PlayerZero has already been initialized. PlayerZero.init() can only be called once.');
@@ -48,14 +53,27 @@ export class PlayerZeroSdk implements PlayerZeroWindow {
     this.injectFetchWrappers();
     const head = document.getElementsByTagName("head").item(0);
     if (!head) {
-      setTimeout(() => this.init(projectToken, endpoint), 100);
+      setTimeout(() => this.init(projectToken, configOrEndpoint), 100);
       return;
     }
 
-    const script = document.createElement("script");
-    script.setAttribute("type", "text/javascript");
-    script.setAttribute("src", `${endpoint}/record/${projectToken}`);
-    script.setAttribute("crossorigin", "anonymous");
+    let endpoint: string;
+    let privacyFnUrl: string | undefined;
+    if (typeof configOrEndpoint === 'string') {
+      endpoint = configOrEndpoint;
+    } else if (typeof configOrEndpoint === 'object' && configOrEndpoint !== null) {
+      endpoint = configOrEndpoint.endpoint ?? 'https://go.playerzero.app';
+      privacyFnUrl = configOrEndpoint.privacyFnUrl;
+    } else {
+      endpoint = 'https://go.playerzero.app';
+    }
+    const script = document.createElement('script');
+    script.setAttribute('type', 'text/javascript');
+    script.setAttribute('src', `${endpoint}/record/${projectToken}`);
+    script.setAttribute('crossorigin', 'anonymous');
+    if (privacyFnUrl !== undefined) {
+      script.setAttribute('data-pz-privacy-src', privacyFnUrl);
+    }
     head.appendChild(script);
   }
 
