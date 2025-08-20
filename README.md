@@ -30,8 +30,8 @@ has already been initialized, use `PlayerZero.isInitialized()`.
 
 ### PlayerZero API
 
-* `PlayerZero.init(projectId: string, options: {endpoint?: string, privacyFnUrl?: string})` - Initialize PlayerZero with
-  your Project ID and optional configuration. The project id can be found on [PlayerZero's](https://playerzero.ai)
+* `PlayerZero.init(apiToken: string, options: {endpoint?: string, privacyFnUrl?: string})` - Initialize PlayerZero with
+  your API Token and optional configuration. The API Token can be found on [PlayerZero's](https://playerzero.ai)
   `Project Settings` under the `Web SDK` area.
 * `PlayerZero.isInitialized(): Boolean` - Returns `true` if PlayerZero is initialized.
 * `PlayerZero.identify(userId: string, metadata: Record<string, unknown>)` - Identify the current user and associate
